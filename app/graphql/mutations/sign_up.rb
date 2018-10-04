@@ -1,33 +1,37 @@
 # frozen_string_literal: true
 
 # mutation {
-#   signIn(email: "email@example.com", password: "password") {
+#   signUp(email: "email@example.com", password: "password", passwordConfirmation: "password") {
 #     user {
 #       email
 #     }
 #   }
 # }
 
-class Mutations::SignIn < GraphQL::Schema::Mutation
+class Mutations::SignUp < GraphQL::Schema::Mutation
   argument :email, String, required: true do
-    description "The user's email"
+    description "New user's email"
   end
 
   argument :password, String, required: true do
-    description "The user's password"
+    description "New user's password"
+  end
+
+  argument :password_confirmation, String, required: true do
+    description "New user's password confirmation"
   end
 
   field :user, Types::User, null: false
   
-  def resolve(email:, password:)
+  def resolve(args)
     response = context[:response]
-    user = User.find_by email: email
+    user = User.new args
     
-    if user.present? && user.valid_password?(password)
+    if user.save
       response.set_header 'Authorization', GraphQL::Auth::JwtManager.issue({ user: user.id }) # TODO use uuid
       { user: user }
     else
-      message = 'Invalid username or password.'
+      message = user.errors.full_messages.first
       context.add_error(GraphQL::ExecutionError.new(message))
     end
   end
