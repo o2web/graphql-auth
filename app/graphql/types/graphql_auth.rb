@@ -1,6 +1,6 @@
 # implements GraphQLAuth in in Types::MutationType to access auth mutations
 
-module Types::GraphQLAuth
+module Types::GraphqlAuth
   include GraphQL::Schema::Interface
 
   field :sign_in, mutation: Mutations::SignIn

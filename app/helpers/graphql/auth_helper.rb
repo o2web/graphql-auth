@@ -2,7 +2,7 @@
 #
 # ::GraphQLSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
 
-module GraphQL
+module Graphql
   module AuthHelper
     def context
       {
