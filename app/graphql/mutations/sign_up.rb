@@ -5,6 +5,10 @@
 #     user {
 #       email
 #     }
+#     errors {
+#       field
+#       message
+#     }
 #   }
 # }
 
@@ -21,7 +25,8 @@ class Mutations::SignUp < GraphQL::Schema::Mutation
     description "New user's password confirmation"
   end
 
-  field :user, Types::User, null: false
+  field :user, Types::User, null: true
+  field :errors, [Types::Error], null: true
   
   def resolve(args)
     response = context[:response]
@@ -31,8 +36,9 @@ class Mutations::SignUp < GraphQL::Schema::Mutation
       response.set_header 'Authorization', GraphQL::Auth::JwtManager.issue({ user: user.id }) # TODO use uuid
       { user: user }
     else
-      message = user.errors.full_messages.first
-      context.add_error(GraphQL::ExecutionError.new(message))
+      {
+        errors: user.errors.messages.map{ |field, messages| { field: field.to_s.camelize(:lower), message: messages.first.capitalize } }
+      }
     end
   end
 end

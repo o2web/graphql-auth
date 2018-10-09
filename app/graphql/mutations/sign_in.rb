@@ -5,6 +5,10 @@
 #     user {
 #       email
 #     }
+#     errors {
+#       field
+#       message
+#     }
 #   }
 # }
 
@@ -17,18 +21,29 @@ class Mutations::SignIn < GraphQL::Schema::Mutation
     description "The user's password"
   end
 
-  field :user, Types::User, null: false
+  field :user, Types::User, null: true
+  field :errors, [Types::Error], null: true
   
   def resolve(email:, password:)
     response = context[:response]
     user = User.find_by email: email
+    valid_sign_in = user.present? && user.valid_password?(password)
     
-    if user.present? && user.valid_password?(password)
+    if valid_sign_in
       response.set_header 'Authorization', GraphQL::Auth::JwtManager.issue({ user: user.id }) # TODO use uuid
-      { user: user }
+      {
+        user: user
+      }
     else
-      message = 'Invalid username or password.'
-      context.add_error(GraphQL::ExecutionError.new(message))
+      {
+        errors: [
+          {
+            field: :_error,
+            message: I18n.t('devise.failure.invalid',
+                            authentication_keys: I18n.t('activerecord.attributes.user.email'))
+          }
+        ]
+      }
     end
   end
 end
