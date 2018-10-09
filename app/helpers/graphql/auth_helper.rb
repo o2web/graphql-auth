@@ -1,6 +1,6 @@
-# include helper in GraphqlController to use context method so that current_user will be available
+# include this helper in GraphqlController to use context method so that current_user will be available
 #
-# ::GraphQLSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+# ::GraphqlSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
 
 module Graphql
   module AuthHelper
@@ -23,6 +23,8 @@ module Graphql
       response.set_header 'Authorization', GraphQL::Auth::JwtManager.issue({ user: user.id }) if user.present?
 
       user
+    rescue JWT::ExpiredSignature
+      nil
     end
   end
 end

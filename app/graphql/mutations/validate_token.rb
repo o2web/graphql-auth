@@ -14,11 +14,11 @@ class Mutations::ValidateToken < GraphQL::Schema::Mutation
   field :user, Types::User, null: true
   
   def resolve()
-    current_user = context[:current_user]
+    user = context[:current_user]
     
     {
-      valid: current_user.present?,
-      user: current_user,
+      valid: user.present?,
+      user: user,
     }
   end
 end

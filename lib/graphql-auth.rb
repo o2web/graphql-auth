@@ -4,6 +4,7 @@ module GraphQL
 
     require 'graphql-auth/engine'
     require 'graphql-auth/jwt_manager'
+    require 'graphql-auth/reset_password'
     
     class << self
       attr_accessor :configuration
