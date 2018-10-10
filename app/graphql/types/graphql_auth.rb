@@ -3,13 +3,13 @@
 module Types::GraphqlAuth
   include GraphQL::Schema::Interface
 
-  field :sign_in, mutation: Mutations::SignIn
-  field :sign_up, mutation: Mutations::SignUp
+  field :sign_in, mutation: GraphQL::Auth.configuration.sign_in_mutation
+  field :sign_up, mutation: GraphQL::Auth.configuration.sign_up_mutation
 
-  field :forgot_password, mutation: Mutations::ForgotPassword
-  field :reset_password, mutation: Mutations::ResetPassword
+  field :forgot_password, mutation: GraphQL::Auth.configuration.forgot_password_mutation
+  field :reset_password, mutation: GraphQL::Auth.configuration.reset_password_mutation
   
-  field :update_account, mutation: Mutations::UpdateAccount
+  field :update_account, mutation: GraphQL::Auth.configuration.update_account_mutation
   
-  field :validate_token, mutation: Mutations::ValidateToken
+  field :validate_token, mutation: GraphQL::Auth.configuration.validate_token_mutation
 end

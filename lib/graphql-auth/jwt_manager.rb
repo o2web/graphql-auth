@@ -1,10 +1,10 @@
 require 'jwt'
+require 'graphql-auth'
 
 module GraphQL
   module Auth
     class JwtManager
       ALGORITHM = 'HS256'
-      EXPIRATION = 4.hours
       TYPE = 'Bearer'
       
       class << self
@@ -27,7 +27,7 @@ module GraphQL
         private
         
         def auth_secret
-          ENV['JWT_SECRET_KEY']
+          GraphQL::Auth.configuration.jwt_secret_key
         end
 
         def set_type(token)
@@ -39,7 +39,7 @@ module GraphQL
         end
         
         def expiration
-          exp = Time.now.to_i + EXPIRATION
+          exp = Time.now.to_i + GraphQL::Auth.configuration.token_lifespan
           { exp: exp }
         end
       end

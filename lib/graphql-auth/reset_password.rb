@@ -6,7 +6,7 @@ module GraphQL
       class << self
         def url(token)
           url = I18n.locale === :fr ? 'nouveau-mot-de-passe' : 'new-password'
-          "#{ENV['APP_URL']}/#{I18n.locale}/#{url}/#{token}"
+          "#{GraphQL::Auth.configuration.app_url}/#{I18n.locale}/#{url}/#{token}"
         end
       end
     end
