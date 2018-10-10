@@ -5,8 +5,6 @@ require 'graphql-auth/jwt_manager'
 
 module GraphQL
   module Auth
-    VERSION = '0.1.0'
-    
     class << self
       attr_accessor :configuration
     end
