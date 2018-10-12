@@ -10,7 +10,7 @@
 #   }
 # }
 
-class Mutations::ResetPassword < GraphQL::Schema::Mutation
+class Mutations::Auth::ResetPassword < GraphQL::Schema::Mutation
   argument :reset_password_token, String, required: true do
     description "Reset password token"
   end
@@ -24,7 +24,7 @@ class Mutations::ResetPassword < GraphQL::Schema::Mutation
   end
 
   field :valid, Boolean, null: false
-  field :errors, [Types::Error], null: true
+  field :errors, [Types::Auth::Error], null: true
   
   def resolve(args)
     user = User.reset_password_by_token args

@@ -9,11 +9,11 @@
 #   }
 # }
 
-class Mutations::ValidateToken < GraphQL::Schema::Mutation
+class Mutations::Auth::ValidateToken < GraphQL::Schema::Mutation
   field :valid, Boolean, null: false
-  field :user, Types::User, null: true
+  field :user, Types::Auth::User, null: true
   
-  def resolve()
+  def resolve
     user = context[:current_user]
     
     {

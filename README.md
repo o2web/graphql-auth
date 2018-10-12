@@ -67,11 +67,11 @@ class GraphqlController < ActionController::API
     ...
 ```
 
-Make sure to implement `GraphqlAuth` in your MutationType``to make auth mutations available
+Make sure to implement `GraphqlAuth` in your `MutationType` to make auth mutations available
 
 ```
 class Types::MutationType < Types::BaseObject
-  implements GraphqlAuth
+  implements ::Types::GraphqlAuth
 end
 ```
 

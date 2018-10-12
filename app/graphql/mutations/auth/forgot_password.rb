@@ -6,7 +6,7 @@
 #   }
 # }
 
-class Mutations::ForgotPassword < GraphQL::Schema::Mutation
+class Mutations::Auth::ForgotPassword < GraphQL::Schema::Mutation
   argument :email, String, required: true do
     description 'The email with forgotten password'
   end

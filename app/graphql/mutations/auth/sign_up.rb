@@ -12,7 +12,7 @@
 #   }
 # }
 
-class Mutations::SignUp < GraphQL::Schema::Mutation
+class Mutations::Auth::SignUp < GraphQL::Schema::Mutation
   argument :email, String, required: true do
     description "New user's email"
   end
@@ -25,8 +25,8 @@ class Mutations::SignUp < GraphQL::Schema::Mutation
     description "New user's password confirmation"
   end
 
-  field :user, Types::User, null: true
-  field :errors, [Types::Error], null: true
+  field :user, Types::Auth::User, null: true
+  field :errors, [Types::Auth::Error], null: true
   
   def resolve(args)
     response = context[:response]

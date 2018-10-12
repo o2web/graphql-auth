@@ -3,13 +3,13 @@ GraphQL::Auth.configure do |config|
   # config.jwt_secret_key = ENV['JWT_SECRET_KEY']
   # config.app_url = ENV['APP_URL']
 
-  # config.sign_in_mutation = ::Mutations::SignIn
-  # config.sign_up_mutation = ::Mutations::SignUp
+  # config.sign_in_mutation = ::Mutations::Auth::SignIn
+  # config.sign_up_mutation = ::Mutations::Auth::SignUp
 
-  # config.forgot_password_mutation = ::Mutations::ForgotPassword
-  # config.reset_password_mutation = ::Mutations::ResetPassword
+  # config.forgot_password_mutation = ::Mutations::Auth::ForgotPassword
+  # config.reset_password_mutation = ::Mutations::Auth::ResetPassword
 
-  # config.update_account_mutation = ::Mutations::UpdateAccount
+  # config.update_account_mutation = ::Mutations::Auth::UpdateAccount
 
-  # config.validate_token_mutation = ::Mutations::ValidateToken
+  # config.validate_token_mutation = ::Mutations::Auth::ValidateToken
 end

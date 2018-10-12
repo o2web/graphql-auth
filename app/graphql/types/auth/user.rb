@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Types::User < Types::BaseObject
+class Types::Auth::User < GraphQL::Schema::Object
   description 'Data of a user'
 
   field :email, String, null: false do

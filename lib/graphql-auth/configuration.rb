@@ -16,15 +16,15 @@ module GraphQL
         @jwt_secret_key = ENV['JWT_SECRET_KEY']
         @app_url = ENV['APP_URL']
         
-        @sign_in_mutation = ::Mutations::SignIn
-        @sign_up_mutation = ::Mutations::SignUp
+        @sign_in_mutation = ::Mutations::Auth::SignIn
+        @sign_up_mutation = ::Mutations::Auth::SignUp
       
-        @forgot_password_mutation = ::Mutations::ForgotPassword
-        @reset_password_mutation = ::Mutations::ResetPassword
+        @forgot_password_mutation = ::Mutations::Auth::ForgotPassword
+        @reset_password_mutation = ::Mutations::Auth::ResetPassword
       
-        @update_account_mutation = ::Mutations::UpdateAccount
+        @update_account_mutation = ::Mutations::Auth::UpdateAccount
       
-        @validate_token_mutation = ::Mutations::ValidateToken
+        @validate_token_mutation = ::Mutations::Auth::ValidateToken
       end
     end
   end
