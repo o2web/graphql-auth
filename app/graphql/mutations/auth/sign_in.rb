@@ -21,7 +21,7 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
     description "The user's password"
   end
 
-  # field :user, Types::Auth::User, null: true
+  field :user, Types::Auth::User, null: true
   field :errors, [Types::Auth::Error], null: true
   
   def resolve(email:, password:)
