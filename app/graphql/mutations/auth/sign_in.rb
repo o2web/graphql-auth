@@ -12,7 +12,7 @@
 #   }
 # }
 
-class Mutations::SignIn < GraphQL::Schema::Mutation
+class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
   argument :email, String, required: true do
     description "The user's email"
   end
@@ -21,8 +21,8 @@ class Mutations::SignIn < GraphQL::Schema::Mutation
     description "The user's password"
   end
 
-  field :user, Types::User, null: true
-  field :errors, [Types::Error], null: true
+  field :user, Types::Auth::User, null: true
+  field :errors, [Types::Auth::Error], null: true
   
   def resolve(email:, password:)
     response = context[:response]

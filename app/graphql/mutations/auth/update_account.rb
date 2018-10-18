@@ -12,7 +12,7 @@
 #   }
 # }
 
-class Mutations::UpdateAccount < GraphQL::Schema::Mutation
+class Mutations::Auth::UpdateAccount < GraphQL::Schema::Mutation
   argument :current_password, String, required: true do
     description "User's current password"
   end
@@ -25,8 +25,8 @@ class Mutations::UpdateAccount < GraphQL::Schema::Mutation
     description "User's new password confirmation"
   end
   
-  field :user, Types::User, null: true
-  field :errors, [Types::Error], null: true
+  field :user, Types::Auth::User, null: true
+  field :errors, [Types::Auth::Error], null: true
   
   def resolve(args)
     user = context[:current_user]

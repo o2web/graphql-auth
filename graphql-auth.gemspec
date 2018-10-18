@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'graphql-auth'
-  spec.version       = '0.1.0'
+  spec.version       = '0.1.1'
   spec.authors       = ['Guillaume Ferland']
   spec.email         = ['ferland182@gmail.com']
   spec.platform    = Gem::Platform::RUBY
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 1.15'
   spec.add_development_dependency 'rake', '~> 10.0'
-  spec.add_dependency 'graphql', '~> 1.8.5'
-  spec.add_dependency 'devise', '~> 4.4.3'
-  spec.add_dependency 'jwt', '~> 1.5.6'
+  spec.add_dependency 'graphql', '~> 1.8'
+  spec.add_dependency 'devise', '~> 4.4'
+  spec.add_dependency 'jwt', '~> 1.5'
 end

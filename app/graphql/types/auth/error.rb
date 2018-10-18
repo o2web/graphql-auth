@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Types::Error < Types::BaseObject
+class Types::Auth::Error < GraphQL::Schema::Object
   description 'Form error'
 
   field :field, String, null: false do
