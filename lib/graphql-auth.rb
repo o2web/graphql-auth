@@ -1,3 +1,4 @@
+require 'devise'
 require 'graphql-auth/configuration'
 require 'graphql-auth/engine'
 require 'graphql-auth/reset_password'
