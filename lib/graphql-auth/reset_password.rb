@@ -1,5 +1,3 @@
-require 'jwt'
-
 module GraphQL
   module Auth
     class ResetPassword
