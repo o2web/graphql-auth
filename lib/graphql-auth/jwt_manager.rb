@@ -6,15 +6,17 @@ module GraphQL
     class JwtManager
       ALGORITHM = 'HS256'
       TYPE = 'Bearer'
-      
+
       class << self
-        def issue(payload)
-          token = JWT.encode payload.merge(expiration),
+        def issue(payload, set_expiration = true)
+          payload.merge!(expiration) if set_expiration.present?
+
+          token = JWT.encode payload,
                              auth_secret,
                              ALGORITHM
           set_type token
         end
-    
+
         def decode(token)
           token = extract_token token
           decrypted_token = JWT.decode token,
@@ -25,7 +27,7 @@ module GraphQL
         end
 
         private
-        
+
         def auth_secret
           GraphQL::Auth.configuration.jwt_secret_key
         end
@@ -37,7 +39,7 @@ module GraphQL
         def extract_token(token)
           token.gsub "#{TYPE} ", ''
         end
-        
+
         def expiration
           exp = Time.now.to_i + GraphQL::Auth.configuration.token_lifespan
           { exp: exp }
