@@ -8,8 +8,12 @@ module GraphQL
       TYPE = 'Bearer'
 
       class << self
-        def issue(payload, set_expiration = true)
-          payload.merge!(expiration) if set_expiration.present?
+        def issue(payload, custom_expiration = nil)
+          if custom_expiration.present? && custom_expiration.kind_of? ActiveSupport::Duration
+            payload[:exp] = custom_expiration
+          else
+            payload.merge!(expiration)
+          end
 
           token = JWT.encode payload,
                              auth_secret,
