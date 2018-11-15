@@ -9,7 +9,7 @@ module GraphQL
 
       class << self
         def issue(payload, custom_expiration = nil)
-          if custom_expiration.present?
+          if custom_expiration.present? && custom_expiration.kind_of? ActiveSupport::Duration
             payload[:exp] = custom_expiration
           else
             payload.merge!(expiration)
