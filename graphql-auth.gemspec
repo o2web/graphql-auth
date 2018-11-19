@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'graphql-auth'
-  spec.version       = '0.1.2'
+  spec.version       = '0.1.3'
   spec.authors       = ['Guillaume Ferland']
   spec.email         = ['ferland182@gmail.com']
   spec.platform    = Gem::Platform::RUBY
