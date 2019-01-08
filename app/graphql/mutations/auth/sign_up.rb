@@ -2,6 +2,7 @@
 
 # mutation {
 #   signUp(email: "email@example.com", password: "password", passwordConfirmation: "password") {
+#     success
 #     user {
 #       email
 #     }
@@ -25,21 +26,28 @@ class Mutations::Auth::SignUp < GraphQL::Schema::Mutation
     description "New user's password confirmation"
   end
 
-  field :user, Types::Auth::User, null: true
-  field :errors, [Types::Auth::Error], null: true
-  
+  field :errors, [::Types::Auth::Error], null: false
+  field :success, Boolean, null: false
+  field :user, ::Types::Auth::User, null: true
+
   def resolve(args)
     response = context[:response]
     user = User.new args
-    
+
     if user.save
       response.set_header 'Authorization', GraphQL::Auth::JwtManager.issue({ user: user.id }) # TODO use uuid
-      { user: user }
+      {
+        errors: [],
+        success: true,
+        user: user
+      }
     else
       {
         errors: user.errors.messages.map do |field, messages|
           { field: field.to_s.camelize(:lower), message: messages.first.capitalize }
-        end
+        end,
+        success: false,
+        user: nil,
       }
     end
   end

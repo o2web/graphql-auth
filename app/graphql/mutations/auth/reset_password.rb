@@ -2,7 +2,7 @@
 
 # mutation {
 #   resetPassword(resetPasswordToken: "token", password: "password", passwordConfirmation: "password") {
-#     valid
+#     success
 #     errors {
 #       field
 #       message
@@ -18,20 +18,20 @@ class Mutations::Auth::ResetPassword < GraphQL::Schema::Mutation
   argument :password, String, required: true do
     description "New user's new password"
   end
-  
+
   argument :password_confirmation, String, required: true do
     description "New user's new password confirmation"
   end
 
-  field :valid, Boolean, null: false
-  field :errors, [Types::Auth::Error], null: true
-  
+  field :errors, [::Types::Auth::Error], null: false
+  field :success, Boolean, null: false
+
   def resolve(args)
     user = User.reset_password_by_token args
-    
+
     if user.errors.any?
       {
-        valid: false,
+        success: true,
         errors: user.errors.messages.map do |field, messages|
           field = field == :reset_password_token ? :_error : field.to_s.camelize(:lower)
           {
@@ -40,7 +40,10 @@ class Mutations::Auth::ResetPassword < GraphQL::Schema::Mutation
         end
       }
     else
-      { valid: true }
+      {
+        errors: [],
+        success: true
+      }
     end
   end
 end
