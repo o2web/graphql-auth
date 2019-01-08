@@ -5,8 +5,8 @@
 module Graphql
   module TokenHelper
     def generate_access_token(user, response)
-      token = GraphQL::Auth::JwtManager.issue_with_expiration({ user: user.id })
-      response.set_header 'Authorization', token # TODO use uuid
+      token = GraphQL::Auth::JwtManager.issue_with_expiration({ user: user.id }) # TODO use uuid
+      response.set_header 'Authorization', token
       response.set_header 'Expires', GraphQL::Auth::JwtManager.token_expiration(token)
     end
 

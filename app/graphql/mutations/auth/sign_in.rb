@@ -42,8 +42,6 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
       generate_access_token(user, response)
       remember_me ? set_refresh_token(user, response) : delete_refresh_token(user)
 
-      puts remember_me
-
       {
         errors: [],
         success: true,

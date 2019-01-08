@@ -20,7 +20,7 @@ module Graphql
       decrypted_token = GraphQL::Auth::JwtManager.decode(request.headers['Authorization'])
 
       user_id = decrypted_token['user']
-      user = User.find_by id: user_id  # TODO use uuid
+      user = User.find_by id: user_id
 
       # update token if user is found with token
       if user.present?
