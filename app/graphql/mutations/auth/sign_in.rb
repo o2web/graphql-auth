@@ -14,6 +14,8 @@
 # }
 
 class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
+  include ::Graphql::TokenHelper
+
   argument :email, String, required: true do
     description "The user's email"
   end
@@ -22,17 +24,26 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
     description "The user's password"
   end
 
+  argument :remember_me, Boolean, required: true do
+    description "User's checkbox to be remembered after connection timeout"
+  end
+
   field :errors, [::Types::Auth::Error], null: false
   field :success, Boolean, null: false
   field :user, ::Types::Auth::User, null: true
 
-  def resolve(email:, password:)
+  def resolve(email:, password:, remember_me:)
     response = context[:response]
+
     user = User.find_by email: email
     valid_sign_in = user.present? && user.valid_password?(password)
 
     if valid_sign_in
-      response.set_header 'Authorization', GraphQL::Auth::JwtManager.issue({ user: user.id }) # TODO use uuid
+      generate_access_token(user, response)
+      remember_me ? set_refresh_token(user, response) : delete_refresh_token(user)
+
+      puts remember_me
+
       {
         errors: [],
         success: true,

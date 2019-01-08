@@ -14,6 +14,8 @@
 # }
 
 class Mutations::Auth::SignUp < GraphQL::Schema::Mutation
+  include ::Graphql::TokenHelper
+
   argument :email, String, required: true do
     description "New user's email"
   end
@@ -35,7 +37,8 @@ class Mutations::Auth::SignUp < GraphQL::Schema::Mutation
     user = User.new args
 
     if user.save
-      response.set_header 'Authorization', GraphQL::Auth::JwtManager.issue({ user: user.id }) # TODO use uuid
+      generate_access_token(user, response)
+
       {
         errors: [],
         success: true,

@@ -26,6 +26,16 @@ rails g graphql_auth:install
 
 Make sure to read all configurations present inside the file and fill them with your own configs.
 
+## Devise gem
+
+Use Devise with a User model and skip all route
+
+```
+Rails.application.routes.draw do
+  devise_for :users, skip: :all
+end
+```
+
 ## Usage
 
 Make 'JWT_SECRET_KEY' and 'APP_URL' available to ENV
