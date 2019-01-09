@@ -8,17 +8,26 @@ module GraphQL
       TYPE = 'Bearer'
 
       class << self
-        def issue(payload, custom_expiration = nil)
+        def issue_with_expiration(payload, custom_expiration = nil)
           if custom_expiration.present? && custom_expiration.is_a?(ActiveSupport::Duration)
             payload[:exp] = custom_expiration
           else
             payload.merge!(expiration)
           end
 
+          issue payload
+        end
+
+        def issue(payload)
           token = JWT.encode payload,
                              auth_secret,
                              ALGORITHM
           set_type token
+        end
+
+        def token_expiration(token)
+          decrypted_token = decode(token)
+          decrypted_token.try(:[], 'exp')
         end
 
         def decode(token)
@@ -48,6 +57,8 @@ module GraphQL
           exp = Time.now.to_i + GraphQL::Auth.configuration.token_lifespan
           { exp: exp }
         end
+
+        alias_method :issue_without_expiration, :issue
       end
     end
   end

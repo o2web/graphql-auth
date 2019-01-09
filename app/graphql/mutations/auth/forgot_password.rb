@@ -3,6 +3,7 @@
 # mutation {
 #  forgotPassword(email: "email@example.com") {
 #     valid
+#     success
 #   }
 # }
 
@@ -11,12 +12,17 @@ class Mutations::Auth::ForgotPassword < GraphQL::Schema::Mutation
     description 'The email with forgotten password'
   end
 
-  field :valid, Boolean, null: false
-  
+  field :errors, [::Types::Auth::Error], null: false
+  field :success, Boolean, null: false
+
   def resolve(email:)
     user = User.find_by email: email
     user.send_reset_password_instructions if user.present?
 
-    { valid: true }
+    {
+      errors: [],
+      success: true,
+      valid: true
+    }
   end
 end
