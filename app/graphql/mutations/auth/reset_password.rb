@@ -31,7 +31,7 @@ class Mutations::Auth::ResetPassword < GraphQL::Schema::Mutation
 
     if user.errors.any?
       {
-        success: true,
+        success: false,
         errors: user.errors.messages.map do |field, messages|
           field = field == :reset_password_token ? :_error : field.to_s.camelize(:lower)
           {
