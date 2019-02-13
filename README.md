@@ -1,4 +1,6 @@
-# GraphQL Auth
+# GraphQL Auth 
+
+[![Build Status](https://travis-ci.org/o2web/graphql-auth.svg?branch=master)](https://travis-ci.org/o2web/graphql-auth) [![Maintainability](https://api.codeclimate.com/v1/badges/7e2515bb59f0b205a603/maintainability)](https://codeclimate.com/github/o2web/graphql-auth/maintainability)
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/graphql-auth`. To experiment with that code, run `bin/console` for an interactive prompt.
 
