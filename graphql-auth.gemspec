@@ -16,9 +16,13 @@ Gem::Specification.new do |spec|
   spec.files	      = Dir['README.md', 'Gemfile', '{app,lib,vendor}/**/*']
   spec.require_paths = %w(app lib)
 
-  spec.add_development_dependency 'bundler', '~> 1.15'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.required_ruby_version = '>= 2.4.5'
+
   spec.add_dependency 'graphql', '~> 1.8'
   spec.add_dependency 'devise', '~> 4.4'
   spec.add_dependency 'jwt', '~> 1.5'
+
+  spec.add_development_dependency 'bundler', '~> 1.15'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rspec', '~> 3.0'
 end

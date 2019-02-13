@@ -1,0 +1,16 @@
+sudo: false
+language: ruby
+before_install:
+  - gem update --system
+  - gem install bundler
+matrix:
+  include:
+    - gemfile: graphql-1.8.gemfile
+      env: GRAPHQL_RUBY_VERSION=1_8 CI=true
+      rvm: 2.6.1
+    - gemfile: graphql-1.8.gemfile
+      env: GRAPHQL_RUBY_VERSION=1_8 CI=true
+      rvm: 2.5.3
+    - gemfile: graphql-1.8.gemfile
+      env: GRAPHQL_RUBY_VERSION=1_8 CI=true
+      rvm: 2.4.5
