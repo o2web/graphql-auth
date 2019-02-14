@@ -8,7 +8,7 @@ module GraphqlAuth
       end
 
       def rake_db
-        rake("graphql_auth:install:migrations")
+        rake("railties:install:migrations")
       end
     end
   end
