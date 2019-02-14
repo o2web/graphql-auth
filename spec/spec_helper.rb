@@ -7,7 +7,6 @@ require 'database_cleaner'
 ENV['RAILS_ENV'] = 'test'
 
 require_relative '../spec/dummy/config/environment'
-ActiveRecord::Migrator.migrations_paths = [File.expand_path('../spec/dummy/db/migrate', __dir__)]
 
 ENV['GRAPHQL_RUBY_VERSION'] ||= '1_8'
 ENV['JWT_SECRET_KEY'] ||= 'secret_test_key'
