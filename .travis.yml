@@ -3,6 +3,7 @@ language: ruby
 before_install: gem install bundler -v 1.17.2
 script:
   - bundle exec rake db:test:prepare
+  - bundle exec rake
 matrix:
   include:
     - gemfile: graphql-1.8.gemfile
