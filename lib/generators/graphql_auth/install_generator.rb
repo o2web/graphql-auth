@@ -5,7 +5,10 @@ module GraphqlAuth
 
       def copy_configuration
         template 'graphql_auth.rb.erb', 'config/initializers/graphql_auth.rb'
-        template 'add_refresh_token_to_user.rb', "db/migrate/#{Time.now.strftime('%Y%m%d%H%M%S')}_add_refresh_token_to_user.rb"
+      end
+
+      def rake_db
+        rake("graphql_auth:install:migrations")
       end
     end
   end
