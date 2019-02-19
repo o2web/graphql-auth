@@ -7,6 +7,7 @@ class Mutations::Auth::ForgotPassword < GraphQL::Schema::Mutation
 
   field :errors, [::Types::Auth::Error], null: false
   field :success, Boolean, null: false
+  field :valid, Boolean, null: false
 
   def resolve(email:)
     user = User.find_by email: email
