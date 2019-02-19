@@ -3,6 +3,10 @@
 require 'spec_helper'
 
 RSpec.describe Mutations::Auth::SignUp, type: :request do
+  before do
+    User.create!(email: 'email@example.com', password: 'password')
+  end
+
   let(:result) do
     GraphqlSchema.execute(
       query_string,
@@ -13,8 +17,8 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
 
   let(:query_string) do
     <<-GRAPHQL
-    mutation($email: String!, $password: String!, $passwordConfirmation: String!) {
-      signUp(email: $email, password: $password, passwordConfirmation: $passwordConfirmation) {
+    mutation($email: String!, $password: String!, $rememberMe: Boolean!) {
+      signIn(email: $email, password: $password, rememberMe: $rememberMe) {
         success
         user {
           email
@@ -39,24 +43,25 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
     {
       "email" => "email@example.com",
       "password" => "password",
-      "passwordConfirmation" => "password"
+      "rememberMe" => false
     }
   end
 
   let(:invalid_variables) do
     {
-      "email" => "emailexample.com",
-      "password" => "password",
-      "passwordConfirmation" => "password2"
+      "email" => "email@example.com",
+      "password" => "password2",
+      "rememberMe" => false
     }
   end
 
   subject { result }
 
   context 'when valid parameters are given' do
-    it 'sign up the user' do
+    it 'sign in the user' do
       subject
-      expect(result['data']['signUp']['success']).to be_truthy
+      expect(result['data']['signIn']['success']).to be_truthy
+      expect(result['data']['signIn']['user']['email']).to eq(User.last.email)
     end
   end
 
@@ -69,9 +74,13 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
       )
     end
 
-    it 'fails to sign up the user' do
+    it 'fails to sign in the user' do
       subject
-      expect(result['data']['signUp']['success']).to be_falsey
+      expect(result['data']['signIn']['success']).to be_falsey
+      expect(result['data']['signIn']['user']).to be_nil
+      expect(result['data']['signIn']['errors'].first['message']).to eq(
+        I18n.t('devise.failure.invalid', authentication_keys: I18n.t('activerecord.attributes.user.email'))
+      )
     end
   end
 end

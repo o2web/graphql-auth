@@ -2,7 +2,15 @@
 
 require 'spec_helper'
 
-RSpec.describe Mutations::Auth::SignUp, type: :request do
+RSpec.describe Mutations::Auth::ResetPassword, type: :request do
+  before do
+    user = User.create!(
+      email: 'email@example.com',
+      password: 'password'
+    )
+    @reset_password_token = user.send_reset_password_instructions
+  end
+
   let(:result) do
     GraphqlSchema.execute(
       query_string,
@@ -13,12 +21,9 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
 
   let(:query_string) do
     <<-GRAPHQL
-    mutation($email: String!, $password: String!, $passwordConfirmation: String!) {
-      signUp(email: $email, password: $password, passwordConfirmation: $passwordConfirmation) {
+    mutation($resetPasswordToken: String!, $password: String!, $passwordConfirmation: String!) {
+      resetPassword(resetPasswordToken: $resetPasswordToken, password: $password, passwordConfirmation: $passwordConfirmation) {
         success
-        user {
-          email
-        }
         errors {
           field
           message
@@ -37,7 +42,7 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
 
   let(:variables) do
     {
-      "email" => "email@example.com",
+      "resetPasswordToken" => @reset_password_token,
       "password" => "password",
       "passwordConfirmation" => "password"
     }
@@ -45,18 +50,18 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
 
   let(:invalid_variables) do
     {
-      "email" => "emailexample.com",
+      "resetPasswordToken" => '1234567890',
       "password" => "password",
-      "passwordConfirmation" => "password2"
+      "passwordConfirmation" => "password"
     }
   end
 
   subject { result }
 
   context 'when valid parameters are given' do
-    it 'sign up the user' do
+    it 'succeeds to reset the password' do
       subject
-      expect(result['data']['signUp']['success']).to be_truthy
+      expect(result['data']['resetPassword']['success']).to be_truthy
     end
   end
 
@@ -69,9 +74,9 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
       )
     end
 
-    it 'fails to sign up the user' do
+    it 'fails to reset the password' do
       subject
-      expect(result['data']['signUp']['success']).to be_falsey
+      expect(result['data']['resetPassword']['success']).to be_falsey
     end
   end
 end

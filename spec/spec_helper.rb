@@ -6,7 +6,8 @@ require 'database_cleaner'
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
 
-require_relative '../spec/dummy/config/environment'
+require 'dummy/config/environment'
+require 'fixtures/response_mock'
 
 ENV['GRAPHQL_RUBY_VERSION'] ||= '1_8'
 ENV['JWT_SECRET_KEY'] ||= 'secret_test_key'
@@ -40,5 +41,10 @@ RSpec.configure do |config|
     DatabaseCleaner.cleaning do
       example.run
     end
+  end
+
+  config.before do
+    Devise.mailer_sender = 'noreply@domain.com'
+    allow(GraphQL::Auth.configuration).to receive(:jwt_secret_key).and_return('jwt_secret_key')
   end
 end
