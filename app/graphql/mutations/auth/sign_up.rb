@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# mutation {
-#   signUp(email: "email@example.com", password: "password", passwordConfirmation: "password") {
-#     success
-#     user {
-#       email
-#     }
-#     errors {
-#       field
-#       message
-#     }
-#   }
-# }
-
 class Mutations::Auth::SignUp < GraphQL::Schema::Mutation
   include ::Graphql::TokenHelper
 

@@ -1,15 +1,5 @@
 # frozen_string_literal: true
 
-# mutation {
-#   resetPassword(resetPasswordToken: "token", password: "password", passwordConfirmation: "password") {
-#     success
-#     errors {
-#       field
-#       message
-#     }
-#   }
-# }
-
 class Mutations::Auth::ResetPassword < GraphQL::Schema::Mutation
   argument :reset_password_token, String, required: true do
     description "Reset password token"
