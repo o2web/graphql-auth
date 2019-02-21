@@ -1,6 +1,10 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+gem 'byebug'
 
-# Specify your gem's dependencies in graphql-devise-auth.gemspec
+gem 'rails', '~> 5.2'
+
+gem 'graphql', '~> 1.8.4'
+
+# Specify your gem's dependencies in graphql-auth.gemspec
 gemspec

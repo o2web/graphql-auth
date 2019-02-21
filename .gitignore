@@ -7,3 +7,15 @@
 /pkg/
 /spec/reports/
 /tmp/
+.DS_Store
+
+spec/dummy/db/*.sqlite3
+spec/dummy/db/*.sqlite3-journal
+spec/dummy/log/*.log
+spec/dummy/node_modules/
+spec/dummy/yarn-error.log
+spec/dummy/storage/
+spec/dummy/tmp/
+
+.rspec_status
+.tool-versions

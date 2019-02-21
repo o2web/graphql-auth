@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# mutation {
-#   updateAccount(current_password: "currentPassword", password: "newPassword", password_confirmation: "newPassword") {
-#     success
-#     user {
-#       email
-#     }
-#     errors {
-#       field
-#       message
-#     }
-#   }
-# }
-
 class Mutations::Auth::UpdateAccount < GraphQL::Schema::Mutation
   argument :current_password, String, required: true do
     description "User's current password"
@@ -32,6 +19,17 @@ class Mutations::Auth::UpdateAccount < GraphQL::Schema::Mutation
 
   def resolve(args)
     user = context[:current_user]
+
+    if user.blank?
+      return {
+        errors: [
+          { field: :_error, message: I18n.t('devise.failure.unauthenticated') }
+        ],
+        success: false,
+        user: nil
+      }
+    end
+
     user.update_with_password args
 
     if user.errors.any?
