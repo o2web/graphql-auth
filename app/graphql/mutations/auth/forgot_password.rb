@@ -10,7 +10,8 @@ class Mutations::Auth::ForgotPassword < GraphQL::Schema::Mutation
   field :valid, Boolean, null: false
 
   def resolve(email:)
-    user = User.find_by email: email
+    user = User.where(locked_at: nil).find_by email: email
+
     user.send_reset_password_instructions if user.present?
 
     {

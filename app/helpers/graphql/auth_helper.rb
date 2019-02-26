@@ -9,40 +9,36 @@ module Graphql
     def context
       {
         current_user: current_user,
-        response: response,
+        response: response
       }
     end
 
     # set current user from Authorization header
     def current_user
-      return if request.headers['Authorization'].nil?
+      authorization_token = request.headers['Authorization']
+      return nil if authorization_token.nil?
 
-      decrypted_token = GraphQL::Auth::JwtManager.decode(request.headers['Authorization'])
-
-      user_id = decrypted_token['user']
-      user = User.find_by id: user_id
+      decrypted_token = GraphQL::Auth::JwtManager.decode(authorization_token)
+      user = User.find_by id: decrypted_token['user']
+      return nil if user.blank? || user.access_locked?
 
       # update token if user is found with token
-      if user.present?
-        generate_access_token(user, response)
-      end
+      generate_access_token(user, response)
 
       user
 
     # rescue expired Authorization header with RefreshToken header
     rescue JWT::ExpiredSignature
-      return nil if request.headers['RefreshToken'].nil?
+      refresh_token = request.headers['RefreshToken']
+      return nil if refresh_token.nil?
 
-      user = User.find_by refresh_token: request.headers['RefreshToken']
+      user = User.find_by refresh_token: refresh_token
+      return nil if user.blank? || user.access_locked?
 
-      if user.present?
-        generate_access_token(user, response)
-        set_refresh_token(user, response)
-      end
+      generate_access_token(user, response)
+      set_refresh_token(user, response)
 
       user
     end
-
-
   end
 end
