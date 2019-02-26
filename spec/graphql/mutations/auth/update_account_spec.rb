@@ -35,13 +35,6 @@ RSpec.describe Mutations::Auth::UpdateAccount, type: :request do
     GRAPHQL
   end
 
-  let(:context) do
-    {
-      current_user: user,
-      response: ResponseMock.new(headers: {}),
-    }
-  end
-
   subject { result }
 
   context 'when the user is logged in' do
