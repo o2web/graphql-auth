@@ -3,8 +3,8 @@
 require 'spec_helper'
 
 RSpec.describe Mutations::Auth::ValidateToken, type: :request do
-  before do
-    @user = User.create!(
+  let!(:user) do
+    User.create!(
       email: 'email@example.com',
       password: 'password'
     )
@@ -32,23 +32,38 @@ RSpec.describe Mutations::Auth::ValidateToken, type: :request do
     GRAPHQL
   end
 
-  let(:context) do
-    {
-      current_user: @user,
-      response: ResponseMock.new(headers: {}),
-    }
-  end
-
   let(:variables) { {} }
 
   subject { result }
 
   context 'when user is logged in' do
-    it 'succeeds to validate the token' do
-      subject
+    let(:context) do
+      {
+        current_user: user,
+        response: ResponseMock.new(headers: {}),
+      }
+    end
 
-      expect(result['data']['validateToken']['success']).to be_truthy
-      expect(result['data']['validateToken']['user']['email']).to eq(@user.email)
+    context 'and not locked' do
+      it 'succeeds to validate the token' do
+        subject
+
+        expect(result['data']['validateToken']['success']).to be_truthy
+        expect(result['data']['validateToken']['user']['email']).to eq(user.email)
+      end
+    end
+
+    context 'and locked' do
+      before do
+        user.lock_access!
+      end
+
+      it 'fails to validate the token' do
+        subject
+
+        expect(result['data']['validateToken']['success']).to be_falsey
+        expect(result['data']['validateToken']['user']).to be_nil
+      end
     end
   end
 
@@ -60,11 +75,26 @@ RSpec.describe Mutations::Auth::ValidateToken, type: :request do
       }
     end
 
-    it 'fails to validate the token' do
-      subject
+    context 'and not locked' do
+      it 'fails to validate the token' do
+        subject
 
-      expect(result['data']['validateToken']['success']).to be_falsey
-      expect(result['data']['validateToken']['user']).to be_nil
+        expect(result['data']['validateToken']['success']).to be_falsey
+        expect(result['data']['validateToken']['user']).to be_nil
+      end
+    end
+
+    context 'and locked' do
+      before do
+        user.lock_access!
+      end
+
+      it 'fails to validate the token' do
+        subject
+
+        expect(result['data']['validateToken']['success']).to be_falsey
+        expect(result['data']['validateToken']['user']).to be_nil
+      end
     end
   end
 end

@@ -3,9 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Mutations::Auth::ForgotPassword, type: :request do
-  before do
-    User.create!(email: 'email@example.com', password: 'password')
-  end
+  let!(:user) { User.create!(email: 'user@example.com', password: 'password') }
 
   let(:result) do
     GraphqlSchema.execute(
@@ -37,28 +35,24 @@ RSpec.describe Mutations::Auth::ForgotPassword, type: :request do
     }
   end
 
-  let(:variables) do
-    {
-      "email" => "email@example.com"
-    }
-  end
-
-  let(:invalid_variables) do
-    {
-      "email" => "bademail@example.com"
-    }
-  end
-
   subject { result }
 
   context 'when valid parameters are given' do
+    let(:variables) do
+      {
+        'email' => user.email
+      }
+    end
+
     before do
       subject
     end
 
     it 'sends a reset password instructions email' do
-      expect(ActionMailer::Base.deliveries.last[:To].value).to eq(User.last.email)
-      expect(ActionMailer::Base.deliveries.last[:Subject].value).to eq('Reset password instructions')
+      email = ActionMailer::Base.deliveries.find{|email| email[:To].value == variables['email'] }
+
+      expect(email[:To].value).to eq(user.email)
+      expect(email[:Subject].value).to eq('Reset password instructions')
     end
 
     it 'returns a success' do
@@ -69,12 +63,46 @@ RSpec.describe Mutations::Auth::ForgotPassword, type: :request do
   end
 
   context 'when invalid parameters are given' do
-    let(:result) do
-      GraphqlSchema.execute(
-        query_string,
-        variables: invalid_variables,
-        context: context
-      )
+    let(:variables) do
+      {
+        'email' => 'bademail@example.com'
+      }
+    end
+
+    before do
+      subject
+    end
+
+    it 'does not sends a reset password instructions email' do
+      email = ActionMailer::Base.deliveries.find{|email| email[:To].value == variables['email'] }
+      expect(email).to be_nil
+    end
+
+    it 'gives no clue about the failure' do
+      subject
+      expect(result['data']['forgotPassword']['errors']).to match_array([])
+      expect(result['data']['forgotPassword']['success']).to be_truthy
+      expect(result['data']['forgotPassword']['valid']).to be_truthy
+    end
+  end
+
+  context 'when user is locked' do
+    let!(:locked_user) { User.create!(email: 'locked_user@example.com', password: 'password') }
+
+    let(:variables) do
+      {
+        'email' => locked_user.email
+      }
+    end
+
+    before do
+      locked_user.lock_access!
+      subject
+    end
+
+    it 'does not sends a reset password instructions email' do
+      email = ActionMailer::Base.deliveries.find{|email| email[:To].value == variables['email'] }
+      expect(email).to be_nil
     end
 
     it 'gives no clue about the failure' do

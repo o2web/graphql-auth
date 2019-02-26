@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Mutations::Auth::SignUp, type: :request do
-  before do
+  let!(:user) do
     User.create!(email: 'email@example.com', password: 'password')
   end
 
@@ -39,25 +39,17 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
     }
   end
 
-  let(:variables) do
-    {
-      "email" => "email@example.com",
-      "password" => "password",
-      "rememberMe" => false
-    }
-  end
-
-  let(:invalid_variables) do
-    {
-      "email" => "email@example.com",
-      "password" => "password2",
-      "rememberMe" => false
-    }
-  end
-
   subject { result }
 
   context 'when valid parameters are given' do
+    let(:variables) do
+      {
+        'email' => 'email@example.com',
+        'password' => 'password',
+        'rememberMe' => false
+      }
+    end
+
     it 'sign in the user' do
       subject
       expect(result['data']['signIn']['success']).to be_truthy
@@ -66,12 +58,35 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
   end
 
   context 'when invalid parameters are given' do
-    let(:result) do
-      GraphqlSchema.execute(
-        query_string,
-        variables: invalid_variables,
-        context: context
+    let(:variables) do
+      {
+        'email' => 'email@example.com',
+        'password' => 'password2',
+        'rememberMe' => false
+      }
+    end
+
+    it 'fails to sign in the user' do
+      subject
+      expect(result['data']['signIn']['success']).to be_falsey
+      expect(result['data']['signIn']['user']).to be_nil
+      expect(result['data']['signIn']['errors'].first['message']).to eq(
+        I18n.t('devise.failure.invalid', authentication_keys: I18n.t('activerecord.attributes.user.email'))
       )
+    end
+  end
+
+  context 'when user is locked' do
+    before do
+      user.lock_access!
+    end
+
+    let(:variables) do
+      {
+        'email' => 'email@example.com',
+        'password' => 'password',
+        'rememberMe' => false
+      }
     end
 
     it 'fails to sign in the user' do
