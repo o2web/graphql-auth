@@ -11,5 +11,4 @@ module Types::GraphqlAuth
   
   field :update_account, mutation: GraphQL::Auth.configuration.update_account_mutation
   
-  field :validate_token, mutation: GraphQL::Auth.configuration.validate_token_mutation
 end
