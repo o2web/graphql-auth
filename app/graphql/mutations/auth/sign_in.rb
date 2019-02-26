@@ -11,7 +11,7 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
     description "The user's password"
   end
 
-  argument :remember_me, Boolean, required: true do
+  argument :remember_me, Boolean, required: false do
     description "User's checkbox to be remembered after connection timeout"
   end
 
