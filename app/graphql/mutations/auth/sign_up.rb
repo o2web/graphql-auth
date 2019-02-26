@@ -37,7 +37,7 @@ class Mutations::Auth::SignUp < GraphQL::Schema::Mutation
           { field: field.to_s.camelize(:lower), message: messages.first.capitalize }
         end,
         success: false,
-        user: nil,
+        user: nil
       }
     end
   end

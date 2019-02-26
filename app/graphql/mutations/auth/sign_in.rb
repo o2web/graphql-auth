@@ -45,7 +45,7 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
           }
         ],
         success: false,
-        user: nil,
+        user: nil
       }
     end
   end
