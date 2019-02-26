@@ -5,12 +5,9 @@ module GraphQL
                     :jwt_secret_key,
                     :app_url,
                     :user_type,
-                    :sign_in_mutation,
                     :sign_up_mutation,
-                    :forgot_password_mutation,
-                    :reset_password_mutation,
-                    :update_account_mutation,
-                    :validate_token_mutation
+                    :lock_account_mutation,
+                    :unlock_account_mutation
 
       def initialize
         @token_lifespan = 4.hours
@@ -19,15 +16,9 @@ module GraphQL
 
         @user_type = ::Types::Auth::User
 
-        @sign_in_mutation = ::Mutations::Auth::SignIn
-        @sign_up_mutation = ::Mutations::Auth::SignUp
-
-        @forgot_password_mutation = ::Mutations::Auth::ForgotPassword
-        @reset_password_mutation = ::Mutations::Auth::ResetPassword
-
-        @update_account_mutation = ::Mutations::Auth::UpdateAccount
-
-        @validate_token_mutation = ::Mutations::Auth::ValidateToken
+        @sign_up_mutation = false
+        @lock_account_mutation = false
+        @unlock_account_mutation = false
       end
     end
   end

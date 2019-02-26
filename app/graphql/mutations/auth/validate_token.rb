@@ -3,7 +3,7 @@
 class Mutations::Auth::ValidateToken < GraphQL::Schema::Mutation
   field :errors, [::Types::Auth::Error], null: false
   field :success, Boolean, null: false
-  field :user, ::Types::Auth::User, null: true
+  field :user, GraphQL::Auth.configuration.user_type, null: true
   field :valid, Boolean, null: false
 
   def resolve

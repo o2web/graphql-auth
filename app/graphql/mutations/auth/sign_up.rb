@@ -17,7 +17,7 @@ class Mutations::Auth::SignUp < GraphQL::Schema::Mutation
 
   field :errors, [::Types::Auth::Error], null: false
   field :success, Boolean, null: false
-  field :user, ::Types::Auth::User, null: true
+  field :user, GraphQL::Auth.configuration.user_type, null: true
 
   def resolve(args)
     response = context[:response]
