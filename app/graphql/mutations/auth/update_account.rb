@@ -15,7 +15,7 @@ class Mutations::Auth::UpdateAccount < GraphQL::Schema::Mutation
 
   field :errors, [::Types::Auth::Error], null: false
   field :success, Boolean, null: false
-  field :user, GraphQL::Auth.configuration.user_type, null: true
+  field :user, GraphQL::Auth.configuration.user_type.constantize, null: true
 
   def resolve(args)
     user = context[:current_user]

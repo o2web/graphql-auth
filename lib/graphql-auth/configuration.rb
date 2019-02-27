@@ -14,7 +14,7 @@ module GraphQL
         @jwt_secret_key = ENV['JWT_SECRET_KEY']
         @app_url = ENV['APP_URL']
 
-        @user_type = ::Types::Auth::User
+        @user_type = '::Types::Auth::User'
 
         @sign_up_mutation = false
         @lock_account_mutation = false
