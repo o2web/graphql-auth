@@ -3,12 +3,11 @@
 require 'spec_helper'
 
 RSpec.describe Mutations::Auth::ResetPassword, type: :request do
-  before do
+  let!(:user) do
     user = User.create!(
       email: 'email@example.com',
       password: 'password'
     )
-    @reset_password_token = user.send_reset_password_instructions
   end
 
   let(:result) do
@@ -40,25 +39,21 @@ RSpec.describe Mutations::Auth::ResetPassword, type: :request do
     }
   end
 
-  let(:variables) do
-    {
-      "resetPasswordToken" => @reset_password_token,
-      "password" => "password",
-      "passwordConfirmation" => "password"
-    }
-  end
-
-  let(:invalid_variables) do
-    {
-      "resetPasswordToken" => '1234567890',
-      "password" => "password",
-      "passwordConfirmation" => "password"
-    }
-  end
-
   subject { result }
 
   context 'when valid parameters are given' do
+    before do
+      @reset_password_token = user.send_reset_password_instructions
+    end
+
+    let(:variables) do
+      {
+        'resetPasswordToken' => @reset_password_token,
+        'password' => 'password',
+        'passwordConfirmation' => 'password'
+      }
+    end
+
     it 'succeeds to reset the password' do
       subject
       expect(result['data']['resetPassword']['success']).to be_truthy
@@ -66,12 +61,32 @@ RSpec.describe Mutations::Auth::ResetPassword, type: :request do
   end
 
   context 'when invalid parameters are given' do
-    let(:result) do
-      GraphqlSchema.execute(
-        query_string,
-        variables: invalid_variables,
-        context: context
-      )
+    let(:variables) do
+      {
+        'resetPasswordToken' => '1234567890',
+        'password' => 'password',
+        'passwordConfirmation' => 'password'
+      }
+    end
+
+    it 'fails to reset the password' do
+      subject
+      expect(result['data']['resetPassword']['success']).to be_falsey
+    end
+  end
+
+  context 'when user is locked' do
+    before do
+      user.lock_access!
+      @reset_password_token = user.send_reset_password_instructions
+    end
+
+    let(:variables) do
+      {
+        'resetPasswordToken' => @reset_password_token,
+        'password' => 'password',
+        'passwordConfirmation' => 'password'
+      }
     end
 
     it 'fails to reset the password' do

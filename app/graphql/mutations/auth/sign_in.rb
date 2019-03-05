@@ -11,18 +11,19 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
     description "The user's password"
   end
 
-  argument :remember_me, Boolean, required: true do
+  argument :remember_me, Boolean, required: false do
     description "User's checkbox to be remembered after connection timeout"
   end
 
   field :errors, [::Types::Auth::Error], null: false
   field :success, Boolean, null: false
-  field :user, ::Types::Auth::User, null: true
+  field :user, GraphQL::Auth.configuration.user_type.constantize, null: true
 
   def resolve(email:, password:, remember_me:)
     response = context[:response]
 
-    user = User.find_by email: email
+    user = User.where(locked_at: nil).find_by email: email
+
     valid_sign_in = user.present? && user.valid_password?(password)
 
     if valid_sign_in
@@ -44,7 +45,7 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
           }
         ],
         success: false,
-        user: nil,
+        user: nil
       }
     end
   end

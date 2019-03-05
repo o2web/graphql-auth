@@ -35,25 +35,17 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
     }
   end
 
-  let(:variables) do
-    {
-      "email" => "email@example.com",
-      "password" => "password",
-      "passwordConfirmation" => "password"
-    }
-  end
-
-  let(:invalid_variables) do
-    {
-      "email" => "emailexample.com",
-      "password" => "password",
-      "passwordConfirmation" => "password2"
-    }
-  end
-
   subject { result }
 
   context 'when valid parameters are given' do
+    let(:variables) do
+      {
+        'email' => 'email@example.com',
+        'password' => 'password',
+        'passwordConfirmation' => 'password'
+      }
+    end
+
     it 'sign up the user' do
       subject
       expect(result['data']['signUp']['success']).to be_truthy
@@ -61,12 +53,12 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
   end
 
   context 'when invalid parameters are given' do
-    let(:result) do
-      GraphqlSchema.execute(
-        query_string,
-        variables: invalid_variables,
-        context: context
-      )
+    let(:variables) do
+      {
+        'email' => 'emailexample.com',
+        'password' => 'password',
+        'passwordConfirmation' => 'password2'
+      }
     end
 
     it 'fails to sign up the user' do

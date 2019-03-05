@@ -5,7 +5,7 @@ require "graphql-auth/version"
 Gem::Specification.new do |spec|
   spec.name          = 'graphql-auth'
   spec.version       = GraphQL::Auth::VERSION
-  spec.authors       = ['Guillaume Ferland']
+  spec.authors       = ['Guillaume Ferland', 'Brice Sanchez']
   spec.email         = ['ferland182@gmail.com']
   spec.platform      = Gem::Platform::RUBY
   spec.summary       = %q{GraphQL + JWT + Devise}

@@ -17,7 +17,7 @@ class Mutations::Auth::ResetPassword < GraphQL::Schema::Mutation
   field :success, Boolean, null: false
 
   def resolve(args)
-    user = User.reset_password_by_token args
+    user = User.where(locked_at: nil).reset_password_by_token args
 
     if user.errors.any?
       {
