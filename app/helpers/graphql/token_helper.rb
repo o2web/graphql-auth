@@ -16,7 +16,7 @@ module Graphql
       response.set_header 'RefreshToken', refresh_token
     end
 
-    def set_current_user_token(user, context)
+    def set_current_user(user)
       context[:current_user] = user
     end
 
