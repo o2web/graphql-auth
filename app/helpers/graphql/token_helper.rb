@@ -16,6 +16,10 @@ module Graphql
       response.set_header 'RefreshToken', refresh_token
     end
 
+    def set_current_user(user)
+      context[:current_user] = user
+    end
+
     def delete_refresh_token(user)
       user.update_column :refresh_token, nil if user.refresh_token.present?
     end
