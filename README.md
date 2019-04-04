@@ -1,8 +1,10 @@
 # GraphQL Auth 
 
 [![Build Status](https://travis-ci.org/o2web/graphql-auth.svg?branch=master)](https://travis-ci.org/o2web/graphql-auth) [![Maintainability](https://api.codeclimate.com/v1/badges/7e2515bb59f0b205a603/maintainability)](https://codeclimate.com/github/o2web/graphql-auth/maintainability)
+[![Downloads](https://img.shields.io/gem/dt/graphql-auth.svg)](https://rubygems.org/gems/graphql-auth)
+[![Latest Version](https://img.shields.io/gem/v/graphql-auth.svg)](https://rubygems.org/gems/graphql-auth)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/graphql-auth`. To experiment with that code, run `bin/console` for an interactive prompt.
+This gem provides an authentication mechanism on a GraphQL API. It use JSON Web Token (JWT) and Devise logic.
 
 ## Installation
 
@@ -32,7 +34,7 @@ Make sure to read all configurations present inside the file and fill them with 
 
  Use Devise with a User model and skip all route	
 
- ```	
+ ```ruby	
 Rails.application.routes.draw do	
   devise_for :users, skip: :all	
 end	
@@ -49,14 +51,14 @@ APP_URL=
 
 Make sure the `Authorization` header is allowed in your api
 
-```
+```ruby
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins '*'
     resource '*',
-             headers: %w(Authorization),
+             headers: %w(Authorization Expires RefreshToken),
              methods: :any,
-             expose: %w(Authorization),
+             expose: %w(Authorization Expires RefreshToken),
              max_age: 600
   end
 end
@@ -64,7 +66,7 @@ end
 
 Make sure to include `Graphql::AuthHelper` in your `GraphqlController`. A context method returning the current_user will be available
 
-```
+```ruby
 class GraphqlController < ActionController::API
   
   include Graphql::AuthHelper
@@ -81,7 +83,7 @@ class GraphqlController < ActionController::API
 
 Make sure to implement `GraphqlAuth` in your `MutationType` to make auth mutations available
 
-```
+```ruby
 class Types::MutationType < Types::BaseObject
   implements ::Types::GraphqlAuth
 end
@@ -91,16 +93,18 @@ end
 
 If you can to customize any mutation, make sure to update the configurations
 
-```
+```ruby
 GraphQL::Auth.configure do |config|
   # config.token_lifespan = 4.hours
   # config.jwt_secret_key = ENV['JWT_SECRET_KEY']
   # config.app_url = ENV['APP_URL']
 
-  config.sign_in_mutation = ::Mutations::CustomSignIn
-  
-  ...
+  # config.user_type = '::Types::Auth::User'
 
+  # config.sign_up_mutation = false
+  # config.lock_account_mutation = false
+  # config.unlock_account_mutation = false
+end
 ```
 
 ## Development
