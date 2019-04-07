@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Mutations::Auth::ValidateToken < GraphQL::Schema::Mutation
+  include ::Graphql::LockAccountHelper
+
   field :errors, [::Types::Auth::Error], null: false
   field :success, Boolean, null: false
   field :user, GraphQL::Auth.configuration.user_type.constantize, null: true
@@ -9,7 +11,7 @@ class Mutations::Auth::ValidateToken < GraphQL::Schema::Mutation
   def resolve
     user = context[:current_user]
 
-    if user.present? && !user.access_locked?
+    if user.present? && !locked_account?(user)
       {
         errors: [],
         success: true,

@@ -5,6 +5,7 @@
 module Graphql
   module AuthHelper
     include ::Graphql::TokenHelper
+    include ::Graphql::LockAccountHelper
 
     def context
       {
@@ -20,7 +21,7 @@ module Graphql
 
       decrypted_token = GraphQL::Auth::JwtManager.decode(authorization_token)
       user = User.find_by id: decrypted_token['user']
-      return nil if user.blank? || user.access_locked?
+      return nil if user.blank? || locked_account?(user)
 
       # update token if user is found with token
       generate_access_token(user, response)

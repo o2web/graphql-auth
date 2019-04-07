@@ -5,7 +5,7 @@ module Types::GraphqlAuth
 
   field :sign_in, mutation: ::Mutations::Auth::SignIn
 
-  if GraphQL::Auth.configuration.lock_account_mutation
+  if GraphQL::Auth.configuration.sign_up_mutation
     field :sign_up, mutation: ::Mutations::Auth::SignUp
   end
 

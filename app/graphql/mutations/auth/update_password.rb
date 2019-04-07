@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class Mutations::Auth::UpdateAccount < GraphQL::Schema::Mutation
-  argument :input, GraphQL::Auth.configuration.update_password_input_type.constantize, required: true do
-    description "Update account input"
+class Mutations::Auth::UpdatePassword < GraphQL::Schema::Mutation
+  argument :input, GraphQL::Auth.configuration.update_account_input_type.constantize, required: true do
+    description "Update password input"
   end
 
   field :errors, [::Types::Auth::Error], null: false
@@ -22,7 +22,7 @@ class Mutations::Auth::UpdateAccount < GraphQL::Schema::Mutation
       }
     end
 
-    user.update_without_password input.to_h
+    user.update_with_password input.to_h
 
     if user.errors.any?
       {

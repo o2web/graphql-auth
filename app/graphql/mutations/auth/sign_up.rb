@@ -3,25 +3,17 @@
 class Mutations::Auth::SignUp < GraphQL::Schema::Mutation
   include ::Graphql::TokenHelper
 
-  argument :email, String, required: true do
-    description "New user's email"
-  end
-
-  argument :password, String, required: true do
-    description "New user's password"
-  end
-
-  argument :password_confirmation, String, required: true do
-    description "New user's password confirmation"
+  argument :input, GraphQL::Auth.configuration.sign_up_input_type.constantize, required: true do
+    description "Sign up input"
   end
 
   field :errors, [::Types::Auth::Error], null: false
   field :success, Boolean, null: false
   field :user, GraphQL::Auth.configuration.user_type.constantize, null: true
 
-  def resolve(args)
+  def resolve(input:)
     response = context[:response]
-    user = User.new args
+    user = User.new input.to_h
 
     if user.save
       generate_access_token(user, response)

@@ -100,6 +100,9 @@ GraphQL::Auth.configure do |config|
   # config.app_url = ENV['APP_URL']
 
   # config.user_type = '::Types::Auth::User'
+  # config.sign_up_input_type = '::Types::Auth::Inputs::SignUp'
+  # config.update_account_input_type = '::Types::Auth::Inputs::UpdateAccount' 
+  # config.update_password_input_type = '::Types::Inputs::UpdatePassword'
 
   # config.sign_up_mutation = false
   # config.lock_account_mutation = false

@@ -22,7 +22,9 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
   def resolve(email:, password:, remember_me:)
     response = context[:response]
 
-    user = User.where(locked_at: nil).find_by email: email
+    user = User
+    user = user.where(locked_at: nil) if GraphQL::Auth.configuration.lock_account_mutation
+    user = user.find_by email: email
 
     valid_sign_in = user.present? && user.valid_password?(password)
 
