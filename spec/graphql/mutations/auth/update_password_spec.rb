@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Mutations::Auth::UpdateAccount, type: :request do
+RSpec.describe Mutations::Auth::UpdatePassword, type: :request do
   let!(:user) do
     User.create!(
       email: 'email@example.com',
@@ -21,7 +21,7 @@ RSpec.describe Mutations::Auth::UpdateAccount, type: :request do
   let(:query_string) do
     <<-GRAPHQL
     mutation($currentPassword: String!, $password: String!, $passwordConfirmation: String!) {
-      updateAccount(currentPassword: $currentPassword, password: $password, passwordConfirmation: $passwordConfirmation) {
+      updatePassword(currentPassword: $currentPassword, password: $password, passwordConfirmation: $passwordConfirmation) {
         success
         user {
           email
@@ -54,11 +54,11 @@ RSpec.describe Mutations::Auth::UpdateAccount, type: :request do
         }
       end
 
-      it 'succeeds to update the account' do
+      it 'succeeds to update the password' do
         subject
 
-        expect(result['data']['updateAccount']['success']).to be_truthy
-        expect(result['data']['updateAccount']['user']['email']).to eq(user.email)
+        expect(result['data']['updatePassword']['success']).to be_truthy
+        expect(result['data']['updatePassword']['user']['email']).to eq(user.email)
       end
     end
 
@@ -71,9 +71,9 @@ RSpec.describe Mutations::Auth::UpdateAccount, type: :request do
         }
       end
 
-      it 'fails to update the account' do
+      it 'fails to update the password' do
         subject
-        expect(result['data']['updateAccount']['success']).to be_falsey
+        expect(result['data']['updatePassword']['success']).to be_falsey
       end
     end
 
@@ -90,9 +90,9 @@ RSpec.describe Mutations::Auth::UpdateAccount, type: :request do
         }
       end
 
-      it 'fails to update the account' do
+      it 'fails to update the password' do
         subject
-        expect(result['data']['updateAccount']['success']).to be_falsey
+        expect(result['data']['updatePassword']['success']).to be_falsey
       end
     end
   end
@@ -114,9 +114,9 @@ RSpec.describe Mutations::Auth::UpdateAccount, type: :request do
         }
       end
 
-      it 'fails to update the account' do
+      it 'fails to update the password' do
         subject
-        expect(result['data']['updateAccount']['success']).to be_falsey
+        expect(result['data']['updatePassword']['success']).to be_falsey
       end
     end
 
@@ -129,9 +129,9 @@ RSpec.describe Mutations::Auth::UpdateAccount, type: :request do
         }
       end
 
-      it 'fails to update the account' do
+      it 'fails to update the password' do
         subject
-        expect(result['data']['updateAccount']['success']).to be_falsey
+        expect(result['data']['updatePassword']['success']).to be_falsey
       end
     end
 
@@ -148,9 +148,9 @@ RSpec.describe Mutations::Auth::UpdateAccount, type: :request do
         }
       end
 
-      it 'fails to update the account' do
+      it 'fails to update the password' do
         subject
-        expect(result['data']['updateAccount']['success']).to be_falsey
+        expect(result['data']['updatePassword']['success']).to be_falsey
       end
     end
   end
