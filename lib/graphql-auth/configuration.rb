@@ -7,6 +7,7 @@ module GraphQL
                     :user_type,
                     :sign_up_input_type,
                     :update_account_input_type,
+                    :update_password_input_type,
                     :sign_up_mutation,
                     :lock_account_mutation,
                     :unlock_account_mutation
