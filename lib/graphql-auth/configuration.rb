@@ -17,9 +17,9 @@ module GraphQL
         @app_url = ENV['APP_URL']
 
         @user_type = '::Types::Auth::User'
-        @sign_up_input_type = '::Types::Inputs::SignUp'
-        @update_account_input_type = '::Types::Inputs::UpdateAccount'
-        @update_password_input_type = '::Types::Inputs::UpdatePassword'
+        @sign_up_input_type = '::Types::Auth::Inputs::SignUp'
+        @update_account_input_type = '::Types::Auth::Inputs::UpdateAccount'
+        @update_password_input_type = '::Types::Auth::Inputs::UpdatePassword'
 
         @sign_up_mutation = false
         @lock_account_mutation = false
