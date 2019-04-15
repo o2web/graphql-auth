@@ -11,6 +11,7 @@ module Types::GraphqlAuth
 
   field :forgot_password, mutation: ::Mutations::Auth::ForgotPassword
   field :reset_password, mutation: ::Mutations::Auth::ResetPassword
+  field :update_password, mutation: ::Mutations::Auth::UpdatePassword
 
   field :update_account, mutation: ::Mutations::Auth::UpdateAccount
 
