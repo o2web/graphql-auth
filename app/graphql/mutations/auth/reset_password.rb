@@ -22,12 +22,15 @@ class Mutations::Auth::ResetPassword < GraphQL::Schema::Mutation
     if user.errors.any?
       {
         success: false,
-        errors: user.errors.messages.map do |field, messages|
-          field = field == :reset_password_token ? :_error : field.to_s.camelize(:lower)
+        errors: user.errors.messages.map { |field, messages|
+          error_field = field == :reset_password_token ? :_error : field.to_s.camelize(:lower)
+
           {
-            field: field,
-            message: messages.first.capitalize }
-        end
+            field: error_field,
+            message: messages.first.capitalize,
+            details: user.errors.details.dig(field)
+          }
+        }
       }
     else
       {
