@@ -4,7 +4,7 @@ gem 'byebug'
 
 gem 'rails', '~> 5.2'
 
-gem 'graphql', '~> 1.8.4'
+gem 'graphql', '~> 1.8'
 
 # Specify your gem's dependencies in graphql-auth.gemspec
 gemspec
