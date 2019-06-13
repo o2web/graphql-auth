@@ -10,4 +10,8 @@ class Types::Auth::Error < GraphQL::Schema::Object
   field :message, String, null: false do
     description 'Error message'
   end
+
+  field :details, GraphQL::Types::JSON, null: true do
+    description 'Error details'
+  end
 end
