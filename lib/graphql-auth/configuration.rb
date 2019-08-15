@@ -5,9 +5,11 @@ module GraphQL
                     :jwt_secret_key,
                     :app_url,
                     :user_type,
+                    :allow_sign_up,
+                    :allow_lock_account,
+                    :allow_unlock_account,
                     :sign_up_mutation,
-                    :lock_account_mutation,
-                    :unlock_account_mutation
+                    :update_account_mutation
 
       def initialize
         @token_lifespan = 4.hours
@@ -16,9 +18,14 @@ module GraphQL
 
         @user_type = '::Types::Auth::User'
 
-        @sign_up_mutation = false
-        @lock_account_mutation = false
-        @unlock_account_mutation = false
+        # Devise allowed actions
+        @allow_sign_up = true
+        @allow_lock_account = false
+        @allow_unlock_account = false
+
+        # Allow custom mutations for signup and update account
+        @sign_up_mutation = '::Mutations::Auth::SignUp'
+        @update_account_mutation = '::Mutations::Auth::UpdateAccount'
       end
     end
   end
