@@ -9,7 +9,7 @@ class Mutations::Auth::ValidateToken < GraphQL::Schema::Mutation
   def resolve
     user = context[:current_user]
 
-    if user.present? && !user.access_locked?
+    if user.present? && !account_locked(user)
       {
         errors: [],
         success: true,
@@ -24,5 +24,9 @@ class Mutations::Auth::ValidateToken < GraphQL::Schema::Mutation
         valid: false
       }
     end
+  end
+
+  def account_locked(user)
+    GraphQL::Auth.configuration.allow_lock_account && user.access_locked?
   end
 end

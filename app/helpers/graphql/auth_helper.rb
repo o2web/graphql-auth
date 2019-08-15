@@ -20,7 +20,7 @@ module Graphql
 
       decrypted_token = GraphQL::Auth::JwtManager.decode(authorization_token)
       user = User.find_by id: decrypted_token['user']
-      return nil if user.blank? || user.access_locked?
+      return nil if user.blank? || account_locked(user)
 
       # update token if user is found with token
       generate_access_token(user, response)
@@ -33,12 +33,18 @@ module Graphql
       return nil if refresh_token.nil?
 
       user = User.find_by refresh_token: refresh_token
-      return nil if user.blank? || user.access_locked?
+      return nil if user.blank? || account_locked(user)
 
       generate_access_token(user, response)
       set_refresh_token(user, response)
 
       user
+    end
+
+    private
+
+    def account_locked(user)
+      GraphQL::Auth.configuration.allow_lock_account && user.access_locked?
     end
   end
 end

@@ -1,4 +1,4 @@
-# GraphQL Auth 
+# GraphQL Auth
 
 [![Build Status](https://travis-ci.org/o2web/graphql-auth.svg?branch=master)](https://travis-ci.org/o2web/graphql-auth) [![Maintainability](https://api.codeclimate.com/v1/badges/7e2515bb59f0b205a603/maintainability)](https://codeclimate.com/github/o2web/graphql-auth/maintainability)
 [![Downloads](https://img.shields.io/gem/dt/graphql-auth.svg)](https://rubygems.org/gems/graphql-auth)
@@ -21,7 +21,7 @@ And then execute:
 Or install it yourself as:
 
     $ gem install graphql-auth
-    
+
 Then run the installer to create `graphql_auth.rb` file in your initializers folder.
 
 ```
@@ -30,14 +30,14 @@ rails g graphql_auth:install
 
 Make sure to read all configurations present inside the file and fill them with your own configs.
 
-## Devise gem	
+## Devise gem
 
- Use Devise with a User model and skip all route	
+ Use Devise with a User model and skip all route
 
- ```ruby	
-Rails.application.routes.draw do	
-  devise_for :users, skip: :all	
-end	
+ ```ruby
+Rails.application.routes.draw do
+  devise_for :users, skip: :all
+end
 ```
 
 ## Usage
@@ -62,22 +62,22 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
              max_age: 600
   end
 end
-``` 
+```
 
 Make sure to include `Graphql::AuthHelper` in your `GraphqlController`. A context method returning the current_user will be available
 
 ```ruby
 class GraphqlController < ActionController::API
-  
+
   include Graphql::AuthHelper
-  
+
   def execute
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
     result = ::GraphqlSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
-    
+
     ...
 ```
 
@@ -101,9 +101,15 @@ GraphQL::Auth.configure do |config|
 
   # config.user_type = '::Types::Auth::User'
 
-  # config.sign_up_mutation = false
-  # config.lock_account_mutation = false
-  # config.unlock_account_mutation = false
+  # Devise allowed actions
+  # Don't forget to enable the lockable setting in your Devise user model if you plan on using the lock_account feature
+  # config.allow_sign_up = true
+  # config.allow_lock_account = false
+  # config.allow_unlock_account = false
+
+  # Allow custom mutations for signup and update account
+  # config.sign_up_mutation = '::Mutations::Auth::SignUp'
+  # config.update_account_mutation = '::Mutations::Auth::UpdateAccount'
 end
 ```
 
