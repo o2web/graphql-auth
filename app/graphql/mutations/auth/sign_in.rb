@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
+  include ::Graphql::AccountLockHelper
   include ::Graphql::TokenHelper
 
   argument :email, String, required: true do
@@ -22,7 +23,11 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
   def resolve(email:, password:, remember_me:)
     response = context[:response]
 
-    user = User.where(locked_at: nil).find_by email: email
+    if lockable?
+      user = User.where(locked_at: nil).find_by email: email
+    else
+      user = User.find_by email: email
+    end
 
     valid_sign_in = user.present? && user.valid_password?(password)
 
