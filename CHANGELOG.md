@@ -1,6 +1,16 @@
 # Changelog
 
+## 0.6.1
+
+Multiple fixes to allow usage of the gem without the lockable Devise
+feature
+
 ## 0.6.0
+
+### Important
+
+Upgrade to 0.6.1 if you plan on using this gem without Devise's lockable
+feature
 
 ### New features
 
