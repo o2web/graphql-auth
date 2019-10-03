@@ -1,4 +1,5 @@
 class Types::Auth::Inputs::UpdatePassword < Types::BaseInputObject
+  graphql_name 'UpdatePasswordInput'
   description 'Update password arguments'
 
   argument :current_password, String, required: true do
