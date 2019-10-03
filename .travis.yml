@@ -1,17 +1,17 @@
 sudo: false
 language: ruby
-before_install: gem install bundler -v 1.17.2
+before_install: gem install bundler -v 2.0.2
 script:
   - bundle exec rake db:test:prepare
   - bundle exec rake
 matrix:
   include:
-    - gemfile: graphql-1.8.gemfile
-      env: GRAPHQL_RUBY_VERSION=1_8 CI=true
+    - gemfile: graphql-1.9.gemfile
+      env: GRAPHQL_RUBY_VERSION=1_9 CI=true
       rvm: 2.6.1
-    - gemfile: graphql-1.8.gemfile
-      env: GRAPHQL_RUBY_VERSION=1_8 CI=true
+    - gemfile: graphql-1.9.gemfile
+      env: GRAPHQL_RUBY_VERSION=1_9 CI=true
       rvm: 2.5.3
-    - gemfile: graphql-1.8.gemfile
-      env: GRAPHQL_RUBY_VERSION=1_8 CI=true
+    - gemfile: graphql-1.9.gemfile
+      env: GRAPHQL_RUBY_VERSION=1_9 CI=true
       rvm: 2.4.5

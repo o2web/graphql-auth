@@ -1,5 +1,5 @@
 module GraphQL
   module Auth
-    VERSION = '0.4.3'
+    VERSION = '0.6.1'
   end
 end

@@ -8,9 +8,11 @@ module GraphQL
                     :sign_up_input_type,
                     :update_account_input_type,
                     :update_password_input_type,
+                    :allow_sign_up,
+                    :allow_lock_account,
+                    :allow_unlock_account,
                     :sign_up_mutation,
-                    :lock_account_mutation,
-                    :unlock_account_mutation
+                    :update_account_mutation
 
       def initialize
         @token_lifespan = 4.hours
@@ -22,9 +24,14 @@ module GraphQL
         @update_account_input_type = '::Types::Auth::Inputs::UpdateAccount'
         @update_password_input_type = '::Types::Auth::Inputs::UpdatePassword'
 
-        @sign_up_mutation = false
-        @lock_account_mutation = false
-        @unlock_account_mutation = false
+        # Devise allowed actions
+        @allow_sign_up = true
+        @allow_lock_account = false
+        @allow_unlock_account = false
+
+        # Allow custom mutations for signup and update account
+        @sign_up_mutation = '::Mutations::Auth::SignUp'
+        @update_account_mutation = '::Mutations::Auth::UpdateAccount'
       end
     end
   end

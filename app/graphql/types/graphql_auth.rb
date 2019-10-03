@@ -5,23 +5,23 @@ module Types::GraphqlAuth
 
   field :sign_in, mutation: ::Mutations::Auth::SignIn
 
-  if GraphQL::Auth.configuration.sign_up_mutation
-    field :sign_up, mutation: ::Mutations::Auth::SignUp
+  if GraphQL::Auth.configuration.allow_sign_up
+    field :sign_up, mutation: GraphQL::Auth.configuration.sign_up_mutation.constantize
   end
 
   field :forgot_password, mutation: ::Mutations::Auth::ForgotPassword
   field :reset_password, mutation: ::Mutations::Auth::ResetPassword
   field :update_password, mutation: ::Mutations::Auth::UpdatePassword
 
-  field :update_account, mutation: ::Mutations::Auth::UpdateAccount
+  field :update_account, mutation: GraphQL::Auth.configuration.update_account_mutation.constantize
 
   field :validate_token, mutation: ::Mutations::Auth::ValidateToken
 
-  if GraphQL::Auth.configuration.lock_account_mutation
+  if GraphQL::Auth.configuration.allow_lock_account
     field :lock_account, mutation: Mutations::Auth::LockAccount
   end
 
-  if GraphQL::Auth.configuration.unlock_account_mutation
+  if GraphQL::Auth.configuration.allow_unlock_account
     field :unlock_account, mutation: Mutations::Auth::UnlockAccount
   end
 end
