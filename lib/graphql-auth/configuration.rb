@@ -5,6 +5,9 @@ module GraphQL
                     :jwt_secret_key,
                     :app_url,
                     :user_type,
+                    :sign_up_input_type,
+                    :update_account_input_type,
+                    :update_password_input_type,
                     :allow_sign_up,
                     :allow_lock_account,
                     :allow_unlock_account,
@@ -17,6 +20,9 @@ module GraphQL
         @app_url = ENV['APP_URL']
 
         @user_type = '::Types::Auth::User'
+        @sign_up_input_type = '::Types::Auth::Inputs::SignUp'
+        @update_account_input_type = '::Types::Auth::Inputs::UpdateAccount'
+        @update_password_input_type = '::Types::Auth::Inputs::UpdatePassword'
 
         # Devise allowed actions
         @allow_sign_up = true

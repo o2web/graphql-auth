@@ -21,6 +21,7 @@ module Graphql
 
       decrypted_token = GraphQL::Auth::JwtManager.decode(authorization_token)
       user = User.find_by id: decrypted_token['user']
+
       return nil if user.blank? || account_locked?(user)
 
       # update token if user is found with token

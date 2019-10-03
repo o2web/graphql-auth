@@ -13,8 +13,8 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
 
   let(:query_string) do
     <<-GRAPHQL
-    mutation($email: String!, $password: String!, $passwordConfirmation: String!) {
-      signUp(email: $email, password: $password, passwordConfirmation: $passwordConfirmation) {
+    mutation($input: SignUpInput!) {
+      signUp(input: $input) {
         success
         user {
           email
@@ -40,9 +40,11 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
   context 'when valid parameters are given' do
     let(:variables) do
       {
-        'email' => 'email@example.com',
-        'password' => 'password',
-        'passwordConfirmation' => 'password'
+        'input' => {
+          'email' => 'email@example.com',
+          'password' => 'password',
+          'passwordConfirmation' => 'password'
+        }
       }
     end
 
@@ -55,9 +57,11 @@ RSpec.describe Mutations::Auth::SignUp, type: :request do
   context 'when invalid parameters are given' do
     let(:variables) do
       {
-        'email' => 'emailexample.com',
-        'password' => 'password',
-        'passwordConfirmation' => 'password2'
+        'input' => {
+          'email' => 'email@example.com',
+          'password' => 'password',
+          'passwordConfirmation' => 'password2'
+        }
       }
     end
 
