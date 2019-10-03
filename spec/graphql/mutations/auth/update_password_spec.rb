@@ -20,8 +20,8 @@ RSpec.describe Mutations::Auth::UpdatePassword, type: :request do
 
   let(:query_string) do
     <<-GRAPHQL
-    mutation($currentPassword: String!, $password: String!, $passwordConfirmation: String!) {
-      updatePassword(currentPassword: $currentPassword, password: $password, passwordConfirmation: $passwordConfirmation) {
+    mutation($input: UpdatePasswordInput!) {
+      updatePassword(input: $input) {
         success
         user {
           email
@@ -48,9 +48,11 @@ RSpec.describe Mutations::Auth::UpdatePassword, type: :request do
     context 'when valid parameters are given' do
       let(:variables) do
         {
-          'currentPassword' => 'password',
-          'password' => 'newpassword',
-          'passwordConfirmation' => 'newpassword'
+          'input' => {
+            'currentPassword' => 'password',
+            'password' => 'newpassword',
+            'passwordConfirmation' => 'newpassword'
+          }
         }
       end
 
@@ -65,28 +67,11 @@ RSpec.describe Mutations::Auth::UpdatePassword, type: :request do
     context 'when invalid parameters are given' do
       let(:variables) do
         {
-          'currentPassword' => 'badpassword',
-          'password' => 'newpassword',
-          'passwordConfirmation' => 'newpassword'
-        }
-      end
-
-      it 'fails to update the password' do
-        subject
-        expect(result['data']['updatePassword']['success']).to be_falsey
-      end
-    end
-
-    context 'when user is locked' do
-      before do
-        user.lock_access!
-      end
-
-      let(:variables) do
-        {
-          'currentPassword' => 'badpassword',
-          'password' => 'newpassword',
-          'passwordConfirmation' => 'newpassword'
+          'input' => {
+            'currentPassword' => 'badpassword',
+            'password' => 'newpassword',
+            'passwordConfirmation' => 'newpassword'
+          }
         }
       end
 
@@ -108,9 +93,11 @@ RSpec.describe Mutations::Auth::UpdatePassword, type: :request do
     context 'when valid parameters are given' do
       let(:variables) do
         {
-          'currentPassword' => 'password',
-          'password' => 'newpassword',
-          'passwordConfirmation' => 'newpassword'
+          'input' => {
+            'currentPassword' => 'password',
+            'password' => 'newpassword',
+            'passwordConfirmation' => 'newpassword'
+          }
         }
       end
 
@@ -123,9 +110,11 @@ RSpec.describe Mutations::Auth::UpdatePassword, type: :request do
     context 'when invalid parameters are given' do
       let(:variables) do
         {
-          'currentPassword' => 'badpassword',
-          'password' => 'newpassword',
-          'passwordConfirmation' => 'newpassword'
+          'input' => {
+            'currentPassword' => 'badpassword',
+            'password' => 'newpassword',
+            'passwordConfirmation' => 'newpassword'
+          }
         }
       end
 
@@ -142,9 +131,11 @@ RSpec.describe Mutations::Auth::UpdatePassword, type: :request do
 
       let(:variables) do
         {
-          'currentPassword' => 'badpassword',
-          'password' => 'newpassword',
-          'passwordConfirmation' => 'newpassword'
+          'input' => {
+            'currentPassword' => 'password',
+            'password' => 'newpassword',
+            'passwordConfirmation' => 'newpassword'
+          }
         }
       end
 
