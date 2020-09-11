@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rails", "~> 6.0"
   spec.add_dependency 'graphql', '~> 1.9', '>= 1.9.6'
   spec.add_dependency 'devise', '~> 4.6', '>= 4.6.2'
-  spec.add_dependency 'jwt', '~> 1.5'
+  spec.add_dependency 'jwt', '~> 2.1'
 
   spec.add_development_dependency 'sqlite3', '~> 1.4'
   spec.add_development_dependency 'bundler', '~> 2.0'
