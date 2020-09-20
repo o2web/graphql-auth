@@ -31,6 +31,20 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
 
     valid_sign_in = user.present? && user.valid_password?(password)
 
+    # check confirmable
+    if valid_sign_in && user.respond_to?(:confirmed?) && !user.active_for_authentication?
+      return {
+        errors: [
+          {
+            field: :_error,
+            message: I18n.t('devise.failure.unconfirmed')
+          }
+        ],
+        success: false,
+        user: nil
+      }
+    end
+
     if valid_sign_in
       generate_access_token(user, response)
       set_current_user(user)
