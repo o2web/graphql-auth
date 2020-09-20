@@ -8,6 +8,7 @@ module GraphQL
                     :allow_sign_up,
                     :allow_lock_account,
                     :allow_unlock_account,
+                    :allow_email_confirmable,
                     :sign_up_mutation,
                     :update_account_mutation
 
@@ -22,6 +23,7 @@ module GraphQL
         @allow_sign_up = true
         @allow_lock_account = false
         @allow_unlock_account = false
+        @allow_email_confirmable = false
 
         # Allow custom mutations for signup and update account
         @sign_up_mutation = '::Mutations::Auth::SignUp'
