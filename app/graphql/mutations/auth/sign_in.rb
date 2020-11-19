@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
   include ::Graphql::AccountLockHelper
   include ::Graphql::TokenHelper
@@ -23,45 +21,58 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
   def resolve(email:, password:, remember_me:)
     response = context[:response]
 
-    if lockable?
-      user = User.where(locked_at: nil).find_by email: email
-    else
-      user = User.find_by email: email
-    end
+    user = User.find_by email: email
+    valid_sign_in = user.present? && user.valid_password?(password)
 
-    valid_sign_in = user.present? && user.valid_for_authentication? && user.valid_password?(password)
+    device_lockable_enabled = user.lock_strategy_enabled?(:failed_attempts)
 
-    # check confirmable
-    if valid_sign_in && user.respond_to?(:confirmed?) && !user.active_for_authentication?
-      return {
-        errors: [
-          {
-            field: :_error,
-            message: I18n.t('devise.failure.unconfirmed')
+    if device_lockable_enabled
+      if user.access_locked?
+        return {
+          errors: [
+            {
+              field: :_error,
+              message: I18n.t('devise.failure.locked')
+            }
+          ],
+          success: false,
+          user: nil
+        }
+      end
+
+      user.increment_failed_attempts
+
+      if user.send('attempts_exceeded?')
+          user.lock_access! unless user.access_locked?
+
+          return {
+            errors: [
+              {
+                field: :_error,
+                message: I18n.t('devise.failure.locked')
+              }
+            ],
+            success: false,
+            user: nil
           }
-        ],
-        success: false,
-        user: nil
-      }
+      else
+        user.save(validate: false) 
+      end
     end
+
+    # TODO return locked message, when account locked
+
 
     if valid_sign_in
       generate_access_token(user, response)
       set_current_user(user)
       remember_me ? set_refresh_token(user, response) : delete_refresh_token(user)
-
-      {
-        errors: [],
-        success: true,
-        user: user
-      }
     else
-      {
+      return {
         errors: [
           {
             field: :_error,
-            message: I18n.t('devise.failure.invalid',
-                            authentication_keys: I18n.t('activerecord.attributes.user.email'))
+            message: I18n.t('devise.failure.noaccess')
           }
         ],
         success: false,
