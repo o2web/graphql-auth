@@ -26,20 +26,20 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
 
     device_lockable_enabled = user.lock_strategy_enabled?(:failed_attempts)
 
-    if device_lockable_enabled
-      if user.access_locked?
-        return {
-          errors: [
-            {
-              field: :_error,
-              message: I18n.t('devise.failure.locked')
-            }
-          ],
-          success: false,
-          user: nil
-        }
-      end
+    if user.access_locked?
+      return {
+        errors: [
+          {
+            field: :_error,
+            message: I18n.t('devise.failure.locked')
+          }
+        ],
+        success: false,
+        user: nil
+      }
+    end
 
+    if device_lockable_enabled && !valid_sign_in
       user.increment_failed_attempts
 
       if user.send('attempts_exceeded?')
@@ -60,7 +60,7 @@ class Mutations::Auth::SignIn < GraphQL::Schema::Mutation
       end
     end
 
-    # TODO return locked message, when account locked
+    # TODO tests && error messages
 
 
     if valid_sign_in
