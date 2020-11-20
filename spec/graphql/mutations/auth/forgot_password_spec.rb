@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Mutations::Auth::ForgotPassword, type: :request do
-  let!(:user) { User.create!(email: 'user@example.com', password: 'password') }
+  let!(:user) { User.create!(email: 'user@example.com', password: 'password', confirmed_at: DateTime.now) }
 
   let(:result) do
     GraphqlSchema.execute(
@@ -87,7 +87,7 @@ RSpec.describe Mutations::Auth::ForgotPassword, type: :request do
   end
 
   context 'when user is locked' do
-    let!(:locked_user) { User.create!(email: 'locked_user@example.com', password: 'password') }
+    let!(:locked_user) { User.create!(email: 'locked_user@example.com', password: 'password', confirmed_at: DateTime.now) }
 
     let(:variables) do
       {

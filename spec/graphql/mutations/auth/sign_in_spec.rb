@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe Mutations::Auth::SignUp, type: :request do
   let!(:user) do
-    User.create!(email: 'email@example.com', password: 'password')
+    User.create!(email: 'email@example.com', password: 'password', confirmed_at: DateTime.now)
   end
 
   let(:result) do

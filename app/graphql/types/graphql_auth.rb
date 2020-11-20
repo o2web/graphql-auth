@@ -16,6 +16,10 @@ module Types::GraphqlAuth
 
   field :validate_token, mutation: ::Mutations::Auth::ValidateToken
 
+  if GraphQL::Auth.configuration.allow_email_confirmable
+    field :resend_confirmation_instructions, mutation: ::Mutations::Auth::ResendConfirmationInstructions
+  end
+
   if GraphQL::Auth.configuration.allow_lock_account
     field :lock_account, mutation: Mutations::Auth::LockAccount
   end
