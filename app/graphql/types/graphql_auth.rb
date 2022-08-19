@@ -16,6 +16,8 @@ module Types::GraphqlAuth
 
   field :validate_token, mutation: ::Mutations::Auth::ValidateToken
 
+  field :sign_out, mutation: ::Mutations::Auth::SignOut
+
   if GraphQL::Auth.configuration.allow_lock_account
     field :lock_account, mutation: Mutations::Auth::LockAccount
   end
@@ -23,4 +25,5 @@ module Types::GraphqlAuth
   if GraphQL::Auth.configuration.allow_unlock_account
     field :unlock_account, mutation: Mutations::Auth::UnlockAccount
   end
+
 end
