@@ -20,7 +20,7 @@ class Mutations::Auth::ValidateToken < GraphQL::Schema::Mutation
       }
     else
       {
-        errors: [],
+        errors: user.errors.full_messages,
         success: false,
         user: nil,
         valid: false
