@@ -1,5 +1,4 @@
 require 'jwt'
-require 'graphql-auth'
 
 module GraphQL
   module Auth
