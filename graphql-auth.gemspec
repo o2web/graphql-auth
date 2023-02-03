@@ -15,16 +15,16 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md", "CHANGELOG.md"]
 
-  spec.required_ruby_version = '>= 2.4.5'
+  spec.required_ruby_version = '>= 2.6'
 
-  spec.add_dependency "rails", "~> 5.1"
-  spec.add_dependency 'graphql', '~> 1.9', '>= 1.9.6'
+  spec.add_dependency "rails", "~> 6.1"
+  spec.add_dependency 'graphql', '~> 2.0', '>= 2.0.16'
   spec.add_dependency 'devise', '~> 4.6', '>= 4.6.2'
-  spec.add_dependency 'jwt', '~> 1.5'
+  spec.add_dependency 'jwt', '~> 2.7'
 
-  spec.add_development_dependency 'sqlite3', '~> 1.3.6'
+  spec.add_development_dependency 'sqlite3', '~> 1.6'
   spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'database_cleaner'
 end
