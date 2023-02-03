@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'byebug'
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 7.0'
 
 gem 'graphql', '~> 2.0.16'
 

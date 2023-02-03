@@ -15,9 +15,9 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md", "CHANGELOG.md"]
 
-  spec.required_ruby_version = '>= 2.6'
+  spec.required_ruby_version = '>= 3.2'
 
-  spec.add_dependency "rails", "~> 6.1"
+  spec.add_dependency "rails", "~> 7.0", '>= 7.0.4.2'
   spec.add_dependency 'graphql', '~> 2.0', '>= 2.0.16'
   spec.add_dependency 'devise', '~> 4.6', '>= 4.6.2'
   spec.add_dependency 'jwt', '~> 2.7'
